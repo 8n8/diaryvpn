@@ -1,2 +1,2 @@
-backend/.stack-work/
-backend/backend.cabal
+.stack-work/
+backend.cabal
