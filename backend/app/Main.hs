@@ -14,13 +14,7 @@ main =
             Web.Scotty.setHeader "Content-Type" "text/html"
             Web.Scotty.file "index.html"
 
-        Web.Scotty.post "/api" $
+        Web.Scotty.post "/elm.js" $
             do
-            body <- Web.Scotty.body
-            Control.Monad.IO.Class.liftIO $
-                Data.ByteString.Lazy.writeFile "db" body
-
-        Web.Scotty.get "/api" $
-            do
-            Web.Scotty.setHeader "Content-Type" "application/octet-stream"
-            Web.Scotty.file "db"
+            Web.Scotty.setHeader "Content-Type" "text/html"
+            Web.Scotty.file "elm.js"
