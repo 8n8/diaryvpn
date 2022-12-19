@@ -3,3 +3,4 @@ backend.cabal
 node_modules/
 package-lock.json
 package.json
+elm-stuff/
