@@ -15,7 +15,7 @@
     </style>
   </head>
   <body>
-    <form>
+    <form id="diaryform">
       <label for="diaryentry">Write a diary entry:</label>
       <textarea
         id="diaryentry"
@@ -31,7 +31,30 @@
       <input type="submit" value="Submit" />
     </form>
     <script>
-      let model;
+      "use strict";
+
+      {
+        const maxEntries = 10000;
+        let TIMESTAMPS = new Uint32Array(maxEntries);
+        let ENTRY_ENDS = new Uint32Array(maxEntries);
+        // Assume the average entry length is 1kB.
+        let ENTRIES = new Uint8Array(maxEntries * 1000);
+
+        function save() {
+        }
+
+        function onSubmitDiary(_) {
+          const textBox = document.getElementById("diaryentry");
+          TIMESTAMPS.push(Date.now() / (60 * 1000));
+          ENTRIES.push(textBox.value);
+          save();
+          textBox.value = "";
+        }
+
+        document
+          .getElementById("diaryform")
+          .addEventListener("submit", onSubmitDiary);
+      }
     </script>
   </body>
 </html>
