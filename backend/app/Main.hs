@@ -1,8 +1,6 @@
 module Main (main) where
 
 import qualified Web.Scotty
-import qualified Data.ByteString.Lazy
-import qualified Control.Monad.IO.Class
 
 main :: IO ()
 main =
@@ -14,7 +12,7 @@ main =
             Web.Scotty.setHeader "Content-Type" "text/html"
             Web.Scotty.file "index.html"
 
-        Web.Scotty.post "/elm.js" $
+        Web.Scotty.get "/elm.js" $
             do
             Web.Scotty.setHeader "Content-Type" "text/html"
             Web.Scotty.file "elm.js"
