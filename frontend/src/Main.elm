@@ -28,7 +28,7 @@ init _ _ _ =
 
 
 view : Model -> Browser.Document Msg
-view Model =
+view model =
     { title = "hello Elm!"
     , body = [Html.text "hello Elm!"]
     }
