@@ -3,9 +3,69 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>Main</title>
+    <title>Diary</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        font-size: 18px;
+      }
+      h1 {
+        margin: 0;
+        font-weight: 600;
+        padding: 10px;
+        font-size: 26px;
+      }
+      h2 {
+        font-size: 22px;
+      }
+      #header {
+        background-color: lightcyan;
+        display: flex;
+        justify-content: center;
+      }
+      .fatalError {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 80px;
+      }
+    </style>
   </head>
   <body>
-  Hello
+    <div id="header">
+      <h1>Diary</h1>
+    </div>
+    <div id="mainPage">
+      <div id="app"></div>
+    </div>
+
+    <template id="failedToGetSummary">
+      <div class="fatalError">
+        <h2>Sorry, something went wrong</h2>
+        <span
+          >You could try refreshing the page. This is not an issue with your
+          internet connection.</span
+        >
+      </div>
+    </template>
+    <script>
+      function renderFailedToGetSummary() {
+        const app = document.getElementById("app");
+        const errorTemplate = document.getElementById("failedToGetSummary");
+        const error = errorTemplate.content;
+        app.replaceWith(error);
+      }
+
+      async function main() {
+        const summaryResponse = await fetch("/summary");
+        if (!summaryResponse.ok) {
+          renderFailedToGetSummary();
+          return;
+        }
+      }
+
+      main();
+    </script>
   </body>
 </html>
