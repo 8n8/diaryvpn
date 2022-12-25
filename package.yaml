@@ -1,11 +1,9 @@
-name:                backend
-version:             0.1.0.0
+name: backend
+version: 0.1.0.0
 
 dependencies:
 - base
 - scotty
-- stm
-- bytestring
 
 default-extensions:
 - OverloadedStrings
@@ -23,8 +21,8 @@ ghc-options:
 
 executables:
   backend-exe:
-    main:                Main.hs
-    source-dirs:         app
+    main: Main.hs
+    source-dirs: app
     ghc-options:
     - -threaded
     - -rtsopts
