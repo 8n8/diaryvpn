@@ -4,6 +4,8 @@ version:             0.1.0.0
 dependencies:
 - base
 - scotty
+- stm
+- bytestring
 
 default-extensions:
 - OverloadedStrings
@@ -17,6 +19,7 @@ ghc-options:
 - -Wno-prepositive-qualified-module
 - -Wno-unsafe
 - -Wno-all-missed-specialisations
+- -Wno-missing-kind-signatures
 
 executables:
   backend-exe:
