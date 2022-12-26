@@ -112,6 +112,7 @@
           renderFailedToGetSummary();
           return;
         }
+        debugger;
         const json = await summaryResponse.json();
         renderSummaries(summariesView(json));
       }
