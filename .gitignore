@@ -5,3 +5,5 @@ package-lock.json
 package.json
 elm-stuff/
 elm.js
+venv/
+__pycache__/

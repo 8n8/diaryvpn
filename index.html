@@ -68,6 +68,10 @@
         >
       </div>
     </template>
+
+    <template id="noSummaries">
+      <p>You haven't written any diary entries yet.</p>
+    </template>
     <script>
       function renderFailedToGetSummary() {
         const app = document.getElementById("app");
@@ -76,11 +80,14 @@
         app.replaceWith(error);
       }
 
-      function summaryView(summary) {
-        
+      function noSummariesView() {
+        return document.getElementById("noSummaries").content;
       }
 
       function summariesView(summaries) {
+        if (summaries.length == 0) {
+            return noSummariesView()
+        }
         const div = document.createElement("div");
         for (let i = 0; i < summaries.length; ++i) {
           div.appendChild(summaryView(summaries[i]));
@@ -90,8 +97,7 @@
 
       function renderSummaries(summariesView) {
         const oldApp = document.getElementById("app");
-        oldApp.replaceWith(summariesView(summaries));
-        newApp.id = "app";
+        oldApp.replaceWith(summariesView);
       }
 
       async function main() {
