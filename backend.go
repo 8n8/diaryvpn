@@ -10,6 +10,7 @@ import (
 
 func main() {
 	http.HandleFunc("/", rootHandler)
+    http.HandleFunc("/elm.js", elmJsHandler)
 	http.HandleFunc("/summary", summaryHandler)
 	http.HandleFunc("/favicon.ico", faviconHandler)
 	http.ListenAndServe(":8080", nil)
@@ -21,6 +22,14 @@ var indexHtml []byte
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "text/html")
 	w.Write(indexHtml)
+}
+
+//go:embed elm.js
+var elmJs []byte
+
+func elmJsHandler(w http.ResponseWriter, r *http.Request) {
+    w.Header().Add("Content-Type", "text/javascript")
+    w.Write(elmJs)
 }
 
 //go:embed favicon.ico
