@@ -4,6 +4,7 @@ import Html
 import Browser
 import Url exposing (Url)
 import Browser.Navigation
+import Element exposing (Element)
 
 
 main : Program () Model Msg
@@ -19,7 +20,7 @@ main =
 
 
 type Msg
-    = Msg
+    = NoOp
 
 
 type Model
@@ -32,14 +33,19 @@ init _ _ _ =
 
 
 view : Model -> Browser.Document Msg
-view _ =
+view model =
     { title = "DiaryElm"
-    , body = [ Html.text "hi Elm!" ]
+    , body = [ Element.layout [] (viewBody model) ]
     }
 
 
+viewBody : Model -> Element Msg
+viewBody Model =
+    Element.text "Hello Elm-UI"
+
+
 update : Msg -> Model -> (Model, Cmd Msg)
-update Msg Model =
+update NoOp Model =
     (Model, Cmd.none)
 
 
@@ -50,9 +56,9 @@ subscriptions Model =
 
 onUrlRequest : Browser.UrlRequest -> Msg
 onUrlRequest _ =
-    Msg
+    NoOp
 
 
 onUrlChange : Url -> Msg
 onUrlChange _ =
-    Msg
+    NoOp
