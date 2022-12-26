@@ -50,14 +50,33 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        width: 100%;
+      }
+      #diaryForm {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
       }
     </style>
   </head>
   <body>
     <h1>Diary</h1>
-    <div id="mainPage">
-      <div id="app" class="spinner"></div>
+    <div id="app" class="spinner">
     </div>
+
+    <template id="inputBoxTemplate">
+      <form id="diaryForm">
+        <label for="diaryTextBox">Write a diary entry</label>
+        <textarea
+            id="diaryTextArea"
+            name="diaryTextBox"
+            rows="10"
+            cols="50"
+            spellcheck="true"
+        ></textarea>
+        <input type="submit" value="Submit">
+      </form>
+    </template>
 
     <template id="failedToGetSummary">
       <div class="fatalError">
@@ -81,7 +100,12 @@
       }
 
       function noSummariesView() {
-        return document.getElementById("noSummaries").content;
+        const div = document.createElement("div");
+        const input = document.getElementById("inputBoxTemplate").content;
+        div.appendChild(input);
+        const noSummaries = document.getElementById("noSummaries").content;
+        div.appendChild(noSummaries);
+        return div;
       }
 
       function summariesView(summaries) {
