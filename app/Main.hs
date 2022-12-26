@@ -1,6 +1,7 @@
 module Main (main) where
 
 import qualified Web.Scotty
+import qualified Summaries
 
 main :: IO ()
 main =
@@ -14,4 +15,5 @@ main =
       Web.Scotty.get "/summaries" $
         do
           Web.Scotty.setHeader "Content-Type" "application/json"
-          Web.Scotty.file "summaries.json"
+          summaries <- Summaries.fromFile
+          Web.Scotty.json summaries

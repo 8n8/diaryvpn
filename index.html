@@ -76,14 +76,38 @@
         app.replaceWith(error);
       }
 
+      function summaryView(summary) {
+        
+      }
+
+      function summariesView(summaries) {
+        const div = document.createElement("div");
+        for (let i = 0; i < summaries.length; ++i) {
+          div.appendChild(summaryView(summaries[i]));
+        }
+        return div;
+      }
+
+      function renderSummaries(summariesView) {
+        const oldApp = document.getElementById("app");
+        oldApp.replaceWith(summariesView(summaries));
+        newApp.id = "app";
+      }
+
       async function main() {
         const summaryResponse = await fetch("/summary");
         const app = document.getElementById("app");
         app.classList.remove("spinner");
+        if (summaryResponse.status === 404) {
+          renderNoSummariesView();
+          return;
+        }
         if (!summaryResponse.ok) {
           renderFailedToGetSummary();
           return;
         }
+        const json = await summaryResponse.json();
+        renderSummaries(summariesView(json));
       }
 
       main();
