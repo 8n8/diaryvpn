@@ -11,6 +11,7 @@ import (
 func main() {
 	http.HandleFunc("/", rootHandler)
 	http.HandleFunc("/summary", summaryHandler)
+	http.HandleFunc("/favicon.ico", faviconHandler)
 	http.ListenAndServe(":8080", nil)
 }
 
@@ -20,6 +21,14 @@ var indexHtml []byte
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "text/html")
 	w.Write(indexHtml)
+}
+
+//go:embed favicon.ico
+var faviconIco []byte
+
+func faviconHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "image/x-icon")
+	w.Write(faviconIco)
 }
 
 func summaryHandler(w http.ResponseWriter, r *http.Request) {
