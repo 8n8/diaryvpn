@@ -5,6 +5,7 @@ import Browser
 import Url exposing (Url)
 import Browser.Navigation
 import Element exposing (Element)
+import Summaries exposing (Summaries)
 
 
 main : Program () Model Msg
@@ -24,12 +25,19 @@ type Msg
 
 
 type Model
-    = Model
+    = Loading
+    | Loaded MainPage
+
+
+type alias MainPage =
+        { summaries : Summaries
+        , textBox : String
+        }
 
 
 init : () -> Url -> Browser.Navigation.Key -> (Model, Cmd Msg)
 init _ _ _ =
-    (Model, Cmd.none)
+    (Loading, Cmd.none)
 
 
 view : Model -> Browser.Document Msg
@@ -40,17 +48,36 @@ view model =
 
 
 viewBody : Model -> Element Msg
-viewBody Model =
-    Element.text "Hello Elm-UI"
+viewBody model =
+    case model of
+        Loading ->
+            viewLoading
+
+        Loaded loaded ->
+            viewLoaded loaded
+
+
+
+
+
+viewLoaded : Loaded -> Element Msg
+viewLoaded { textBox, summaries } =
+    [ viewTopBar
+    , viewTextBox textBox
+    , viewSummaries summaries
+    ]
+        |> Element.column []
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
-update NoOp Model =
-    (Model, Cmd.none)
+update msg model =
+    case msg of
+        NoOp ->
+            (model, Cmd.none)
 
 
 subscriptions : Model -> Sub Msg
-subscriptions Model =
+subscriptions _ =
     Sub.none
 
 
