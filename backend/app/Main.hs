@@ -1,74 +1,48 @@
 module Main (main) where
 
-import qualified Tea
-import qualified Cmd
-import qualified Http.Server
-import qualified Msg
-import qualified Http.Routes
-import Data.ByteString
-import qualified Http.Route
+import App (
+    Msg(Init, FileContents)
+    , Cmd(None, ReadFile, Fork), Model, update, init,)
+import Control.Concurrent (forkIO)
+import Control.Exception (try)
+import Prelude (IO, pure, ($), show)
+import Control.Concurrent.STM.TVar (TVar, writeTVar, readTVar, newTVar)
+import Control.Concurrent.STM (atomically)
+import Data.ByteString (readFile)
 
 main :: IO ()
 main =
-    Tea.program init_ update
+    do
+    model <- atomically $ newTVar init
+    updateIo Init model
 
+updateIo :: Msg -> TVar Model -> IO ()
+updateIo msg model =
+    do
+    cmd <-
+        atomically $
+        do
+        oldModel <- readTVar model
+        let (newModel, cmd) = update msg oldModel
+        writeTVar model newModel
+        pure cmd
+    run cmd model
 
-data Model
-    = Fatal String
-    | Ok OkModel
+run :: Cmd -> TVar Model -> IO ()
+run cmd model =
+    case cmd of
+    None ->
+        pure ()
 
+    ReadFile path ->
+        do
+        result <- try $ readFile $ show path
+        updateIo (FileContents path result) model
 
-data OkModel
-    = IndexHtml ByteString
-    | Empty
+    Fork forked ->
+        do
+        _ <- forkIO $ run forked model
+        pure ()
 
-
-init_ :: (Model, Cmd.Cmd)
-init_ =
-    ( Ok Empty
-    , Cmd.ReadFile "index.html"
-    )
-
-
-update :: Msg.Msg -> Model -> (Model, Cmd.Cmd)
-update msg model =
-    case model of
-        Fatal err ->
-            (model, Cmd.None)
-
-        Ok okModel ->
-            updateOk msg okModel
-
-
-updateOk :: Msg.Msg -> OkModel -> (Model, Cmd.Cmd)
-updateOk msg model =
-    case msg of
-    Msg.None ->
-        (Ok model, Cmd.StartHttpServer 3001)
-
-    Msg.FileContents path (Left err) ->
-        ( Fatal $
-          mconcat
-          [ "could not read file \""
-          , path
-          , "\": "
-          , err
-          ]
-        , Cmd.None
-        )
-
-    Msg.FileContents "index.html" (Right contents) ->
-        ( Ok $ IndexHtml contents , Cmd.None )
-
-    Msg.Sequence [] ->
-        (Ok model, Cmd.None)
-
-    Msg.Sequence (first : remainder) ->
-        let
-            (model1, cmd1) = updateOk first model
-            (model2, cmd2) = update (Msg.Sequence remainder) model1
-        in
-        (model2, Cmd.Sequence [cmd1, cmd2])
-
-    Msg.HttpRequestQ httpQueue ->
+    StartHttpServer ->
         
