@@ -3,6 +3,15 @@ version:             0.1.0.0
 
 dependencies:
 - base
+- scotty
+- stm
+- bytestring
+- text
+- containers
+- http-types
+- wai
+- warp
+- binary
 
 ghc-options:
 - -Wall
@@ -14,6 +23,7 @@ ghc-options:
 - -Wmissing-home-modules
 - -Wpartial-fields
 - -Wredundant-constraints
+- -Werror
 
 executables:
   backend-exe:
