@@ -4,6 +4,7 @@ version:             0.1.0.0
 default-extensions:
 - NoImplicitPrelude
 - OverloadedStrings
+- DuplicateRecordFields
 
 dependencies:
 - base
@@ -14,6 +15,11 @@ ghc-options:
 - -Wno-missing-kind-signatures
 - -Wno-missing-safe-haskell-mode
 - -Wno-safe
+- -Wno-missing-deriving-strategies
+- -Wno-unsafe
+- -Wno-monomorphism-restriction
+- -Wno-prepositive-qualified-module
+- -Wno-missing-import-lists
 
 executables:
   backend-exe:
@@ -27,11 +33,21 @@ executables:
     - backend
     - stm
     - bytestring
+    - http-types
+    - binary
+    - wai
 
 library:
   source-dirs: src
   dependencies:
   - bytestring
+  - http-types
+  - wai
+  - text
+  - binary
+  - stm
+  - attoparsec
+  - time
 
 tests:
   ded-test:

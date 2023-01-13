@@ -8,7 +8,10 @@ import Control.Exception (try)
 import Prelude (IO, pure, ($), show)
 import Control.Concurrent.STM.TVar (TVar, writeTVar, readTVar, newTVar)
 import Control.Concurrent.STM (atomically)
-import Data.ByteString (readFile)
+import Data.ByteString (readFile, ByteString)
+import Data.Binary.Builder
+import Network.HTTP.Types
+import Network.Wai
 
 main :: IO ()
 main =
@@ -44,5 +47,13 @@ run cmd model =
         _ <- forkIO $ run forked model
         pure ()
 
-    StartHttpServer ->
-        
+    StartHttpServer port ->
+        do
+        inQ <- liftIO $ atomically newTQueue
+        Network.Wai.Handler.Warp.run port $ \request responseWriter ->
+            do
+            outQ <- liftIO $ atomically newTQueue
+            liftIO $ updateIo (HttpRequest outQ request) model
+            (status, headers, builder) <- atomically $ readTQueue outQ
+            responseWriter $ 
+              Network.Wai.responseBuilder status headers builder
