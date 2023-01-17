@@ -4,6 +4,18 @@ import Control.Monad.IO.Class (liftIO)
 import Data.ByteString.Lazy (writeFile)
 import Web.Scotty (body, file, get, post, scotty, setHeader)
 
+rootPath :: FilePath
+rootPath =
+  "/home/t/.diaryvpn"
+
+dbPath :: FilePath
+dbPath =
+  rootPath ++ "/db"
+
+frontendPath :: FilePath
+frontendPath =
+  rootPath ++ "/index.html"
+
 main :: IO ()
 main =
   scotty 3000 $
@@ -11,19 +23,14 @@ main =
       get "/" $
         do
           setHeader "Content-Type" "text/html;charset=utf-8"
-          file "dist/index.html"
-
-      get "/elm.js" $
-        do
-          setHeader "Content-Type" "application/javascript"
-          file "dist/elm.js"
+          file frontendPath
 
       get "/db" $
         do
           setHeader "Content-Type" "application/json"
-          file "db"
+          file dbPath
 
       post "/db" $
         do
           content <- body
-          liftIO $ Data.ByteString.Lazy.writeFile "db" content
+          liftIO $ Data.ByteString.Lazy.writeFile dbPath content
