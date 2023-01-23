@@ -32,5 +32,5 @@ body : Model -> List (Html ())
 body _ =
     [ Html.form
         []
-        [ Html.text "hi" ]
+        [ Html. "hi" ]
     ]
