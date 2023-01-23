@@ -18,7 +18,11 @@ mkdir ~/.diaryvpn
 elm make src/Main.elm --output=$HOME/.diaryvpn/index.html
 ```
 
+Run the tests with `npx elm-test`.
+
 ## Backend
+
+The backend is written in Haskell. You need to install the Haskell Tool Stack to build it.
 
 Run the following commands:
 
