@@ -1,6 +1,5 @@
 module ReviewConfig exposing (config)
 
-
 import Review.Rule exposing (Rule)
 
 

@@ -1,6 +1,7 @@
 module App exposing (Model(..), Msg(..), defaultFlags, init, update, view)
 
 import Browser
+import Html exposing (Html)
 import ProgramTest exposing (SimulatedEffect)
 import SimulatedEffect.Cmd
 import Url exposing (Url)
@@ -32,7 +33,15 @@ defaultFlags =
 
 
 view : Model -> Browser.Document Msg
-view _ =
+view model =
     { title = "DiaryVPN"
-    , body = []
+    , body = body model
     }
+
+
+body : Model -> List (Html Msg)
+body _ =
+    [ Html.form
+        []
+        [ Html.text "hi" ]
+    ]

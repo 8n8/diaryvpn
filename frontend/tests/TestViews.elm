@@ -33,7 +33,7 @@ start initialUrl =
 
 testInit : Test
 testInit =
-    test "loading on start" <|
+    test "form at start" <|
         \() ->
             start "https://example.com"
                 |> ProgramTest.expectViewHas
