@@ -2,7 +2,8 @@ module Main exposing (main)
 
 import Browser
 import Browser.Navigation
-import Html exposing (Html)
+import Element exposing (Element)
+import Element.Input as Input
 import Url exposing (Url)
 
 
@@ -34,18 +35,25 @@ update _ _ =
 view : Model -> Browser.Document ()
 view model =
     { title = "DiaryVPN"
-    , body = body model
+    , body = [ Element.layout [] (body model) ]
     }
 
 
-body : Model -> List (Html ())
+body : Model -> Element ()
 body _ =
-    [ Html.form
+    Element.column
         []
-        [ Html.div
+        [ Input.multiline
             []
-            [ Html.textarea [] []
-            , Html.label [] [ Html.text "Type your diary entry here:" ]
-            ]
+            { onChange = \_ -> ()
+            , text = ""
+            , placeholder = Nothing
+            , label = Input.labelAbove [] (Element.text "Type your diary entry here:")
+            , spellcheck = True
+            }
+        , Input.button
+            []
+            { onPress = Nothing
+            , label = Element.text "Submit"
+            }
         ]
-    ]
