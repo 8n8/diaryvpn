@@ -1,11 +1,11 @@
 module TestViews exposing (suite)
 
 import App exposing (Model)
+import Expect exposing (Expectation)
 import ProgramTest exposing (ProgramTest, SimulatedEffect)
 import Test exposing (..)
-import Test.Html.Selector as Selector
 import Test.Html.Query as Query
-import Expect exposing (Expectation)
+import Test.Html.Selector as Selector
 
 
 suite : Test
@@ -49,5 +49,5 @@ formHasDiaryTextBox =
 
 expectDiaryInputBox : Query.Single () -> Expectation
 expectDiaryInputBox =
-    Query.find [Selector.tag "form"]
-     >> Query.has [ Selector.tag "input" ]
+    Query.find [ Selector.tag "form" ]
+        >> Query.has [ Selector.tag "textarea" ]
