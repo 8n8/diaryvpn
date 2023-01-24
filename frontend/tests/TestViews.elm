@@ -13,6 +13,7 @@ suite =
     describe "tests"
         [ formAtStart
         , formHasDiaryTextBox
+        , diaryTextBoxHasLabel
         ]
 
 
@@ -51,3 +52,21 @@ expectDiaryInputBox : Query.Single () -> Expectation
 expectDiaryInputBox =
     Query.find [ Selector.tag "form" ]
         >> Query.has [ Selector.tag "textarea" ]
+
+
+diaryTextBoxHasLabel : Test
+diaryTextBoxHasLabel =
+    test "diary text box has label" <|
+        \() ->
+            start "https://example.com"
+                |> ProgramTest.expectView expectDiaryBoxLabel
+
+
+expectDiaryBoxLabel : Query.Single () -> Expectation
+expectDiaryBoxLabel =
+    Query.find [ Selector.tag "form" ]
+        >> Query.children []
+        >> Query.first
+        >> Query.find [ Selector.tag "div" ]
+        >> Query.find [ Selector.tag "label" ]
+        >> Query.has [ Selector.text "Type your diary entry here:" ]
