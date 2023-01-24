@@ -18,28 +18,24 @@ main =
         }
 
 
-init : () -> Url -> Browser.Navigation.Key -> ( Model, Cmd () )
+init : () -> Url -> Browser.Navigation.Key -> ( String, Cmd () )
 init () _ _ =
-    ( Model, Cmd.none )
+    ( "", Cmd.none )
 
 
-type Model
-    = Model
-
-
-update : () -> Model -> ( Model, Cmd () )
+update : () -> String -> ( String, Cmd () )
 update _ _ =
-    ( Model, Cmd.none )
+    ( "", Cmd.none )
 
 
-view : Model -> Browser.Document ()
+view : String -> Browser.Document ()
 view model =
     { title = "DiaryVPN"
     , body = [ Element.layout [] (body model) ]
     }
 
 
-body : Model -> Element ()
+body : String -> Element ()
 body _ =
     Element.column
         []
