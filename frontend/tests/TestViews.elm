@@ -67,6 +67,5 @@ expectDiaryBoxLabel =
     Query.find [ Selector.tag "form" ]
         >> Query.children []
         >> Query.first
-        >> Query.find [ Selector.tag "div" ]
         >> Query.find [ Selector.tag "label" ]
         >> Query.has [ Selector.text "Type your diary entry here:" ]

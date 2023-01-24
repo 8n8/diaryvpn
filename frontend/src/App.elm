@@ -32,5 +32,10 @@ body : Model -> List (Html ())
 body _ =
     [ Html.form
         []
-        [ Html.textarea [] [] ]
+        [ Html.div
+            []
+            [ Html.textarea [] []
+            , Html.label [] [ Html.text "Type your diary entry here:" ]
+            ]
+        ]
     ]
