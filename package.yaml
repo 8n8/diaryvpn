@@ -1,4 +1,4 @@
-name:                diaryvpn
+name:                backend
 version:             0.1.0.0
 
 dependencies:
@@ -15,11 +15,11 @@ ghc-options:
 - -Wpartial-fields
 - -Wredundant-constraints
 
-default-extensions:
-- OverloadedStrings
+library:
+  source-dirs: src
 
 executables:
-  diaryvpn-exe:
+  backend-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -27,5 +27,17 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - scotty
-    - bytestring
+    - backend
+
+tests:
+  backend-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - backend
+    - tasty
+    - tasty-hunit
