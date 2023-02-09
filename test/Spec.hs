@@ -471,15 +471,15 @@ cases =
       Request
         { body = [("newentry", "I ate a ham sandwich")],
           path = ["newentry"],
-          timestamp = 8989,
+          timestamp = 89,
           method = "POST"
         },
       ( Response
-          { body = "",
+          { body = fromStrict $ encodeUtf8 submittedHtml,
             status = ok200,
-            headers = []
+            headers = [("Content-Type", "text/html")]
           },
-        "[{\"entry\": \"I ate a ham sandwich\", \"timestamp\": 0}]"
+        (Strict.pack [89, 0, 0, 0] <> Strict.pack [20, 0, 0, 0] <> "I ate a ham sandwich")
       )
     )
   ]

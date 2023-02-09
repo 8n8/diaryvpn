@@ -1,5 +1,6 @@
 module Diary (diary) where
 
+import Data.Bits (shiftR, (.&.))
 import Data.ByteString as Strict
 import Data.ByteString.Lazy as Lazy
 import Data.Text
@@ -12,19 +13,61 @@ data Request
   = Root
   | Favicon
   | Error404
-  | NewEntry
+  | Error400
+  | Error500
+  | NewEntry Int Text
 
 parseRequest :: Request.Request -> Request
-parseRequest (Request.Request path _ _ _) =
+parseRequest (Request.Request path body _ timestamp) =
   case path of
     [] ->
       Root
     ["favicon.ico"] ->
       Favicon
     ["newentry"] ->
-      NewEntry
+      case body of
+        [("newentry", binary)] ->
+          if timestamp >= 0
+            then case decodeUtf8' binary of
+              Right text ->
+                NewEntry timestamp text
+              Left _ ->
+                Error400
+            else Error500
+        _ ->
+          Error400
     _ ->
       Error404
+
+submittedHtml :: Text
+submittedHtml =
+  "<!DOCTYPE html>\n\
+  \<html lang=\"en\">\n\
+  \  <head>\n\
+  \    <meta charset=\"utf8-8\" />\n\
+  \    <meta name=\"viewport\" content=\"width=device-width\" />\n\
+  \    <title>Diary</title\n\
+  \  </head>\n\
+  \  <body>\n\
+  \    <span>Your new diary entry has been saved.</span>\n\
+  \  </body>\n\
+  \</html>\n\
+  \"
+
+encodeUint32 :: Int -> Strict.ByteString
+encodeUint32 i =
+  Strict.pack $
+    Prelude.map fromIntegral $
+      Prelude.map (\x -> x .&. 0xff) $
+        Prelude.map (\shift -> i `shiftR` shift) $
+          Prelude.map (\x -> x * 8) $
+            Prelude.take 4 [0 ..]
+
+encodeEntry :: Int -> Text -> Strict.ByteString
+encodeEntry timestamp entry =
+  let encoded :: Strict.ByteString
+      encoded = encodeUtf8 entry
+   in encodeUint32 timestamp <> encodeUint32 (Strict.length encoded) <> encoded
 
 diary ::
   Strict.ByteString ->
@@ -32,19 +75,35 @@ diary ::
   (Response, Strict.ByteString)
 diary db request =
   case parseRequest request of
-    NewEntry ->
+    NewEntry text timestamp ->
       ( Response
-          { headers = [],
-            body = Lazy.empty,
+          { headers = [("Content-Type", "text/html")],
+            body = fromStrict $ encodeUtf8 submittedHtml,
             status = ok200
           },
-        "[{\"entry\": \"I ate a ham sandwich\", \"timestamp\": 0}]"
+        (encodeEntry text timestamp)
       )
     Error404 ->
       ( Response
           { headers = [],
             body = Lazy.empty,
             status = notFound404
+          },
+        db
+      )
+    Error400 ->
+      ( Response
+          { headers = [],
+            body = Lazy.empty,
+            status = badRequest400
+          },
+        db
+      )
+    Error500 ->
+      ( Response
+          { headers = [],
+            body = Lazy.empty,
+            status = internalServerError500
           },
         db
       )
