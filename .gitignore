@@ -1,9 +1,2 @@
 .stack-work/
-backend.cabal
-node_modules/
-package-lock.json
-package.json
-elm-stuff/
-elm.js
-venv/
-__pycache__/
+diaryvpn.cabal

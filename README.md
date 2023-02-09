@@ -6,19 +6,7 @@ DiaryVPN is a tiny web app for keeping a diary. It is intended to be run on the 
 
 # Run for development
 
-The static files and database are kept in `$HOME/.diaryvpn`
-
-## Frontend
-
-The frontend is written in Elm. Run these commands to build it:
-
-```
-cd frontend
-mkdir ~/.diaryvpn
-elm make src/Main.elm --output=$HOME/.diaryvpn/index.html
-```
-
-Run the tests with `npx elm-test`.
+The database file is kept at `$HOME/.diaryvpn`
 
 ## Backend
 
