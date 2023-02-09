@@ -81,7 +81,7 @@ diary db request =
             body = fromStrict $ encodeUtf8 submittedHtml,
             status = ok200
           },
-        (encodeEntry text timestamp)
+        (db <> encodeEntry text timestamp)
       )
     Error404 ->
       ( Response
