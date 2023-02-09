@@ -375,7 +375,7 @@ submittedHtml =
   "<!DOCTYPE html>\n\
   \<html lang=\"en\">\n\
   \  <head>\n\
-  \    <meta charset=\"utf8-8\" />\n\
+  \    <meta charset=\"utf-8\" />\n\
   \    <meta name=\"viewport\" content=\"width=device-width\" />\n\
   \    <title>Diary</title\n\
   \  </head>\n\
