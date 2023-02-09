@@ -414,14 +414,15 @@ properties =
                     method = "POST",
                     timestamp = timestamp
                   }
-          let got = diary "" request
+          let initDb = Strict.pack $ Prelude.take 8 $ Prelude.repeat 0
+          let got = diary initDb request
           let expected =
                 ( Response
                     { headers = [("Content-Type", "text/html")],
                       status = ok200,
                       body = fromStrict $ encodeUtf8 submittedHtml
                     },
-                  encodeEntry timestamp entry
+                  initDb <> encodeEntry timestamp entry
                 )
           got Hedgehog.=== expected
   ]
