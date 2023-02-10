@@ -63,3 +63,5 @@ tests:
     - http-types
     - hedgehog
     - tasty-hedgehog
+    - html-entities
+    - time
