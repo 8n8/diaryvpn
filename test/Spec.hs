@@ -21,6 +21,14 @@ import Test.Tasty
 import Test.Tasty.HUnit
 import qualified Test.Tasty.Hedgehog
 
+viewEntry :: (Int, Text) -> Text
+viewEntry (timestamp, entry) =
+  let prettyTime = formatTime timestamp
+   in mconcat
+        [ "    <h2>" <> prettyTime <> "</h1>\n",
+          "    <p>" <> HTMLEntities.Text.text entry <> "</p>\n"
+        ]
+
 indexHtml :: Text
 indexHtml =
   "<!DOCTYPE html>\n\
@@ -412,14 +420,6 @@ formatTime i =
       utc = Data.Time.Clock.POSIX.posixSecondsToUTCTime $ Data.Time.Clock.secondsToNominalDiffTime (realToFrac i)
       str = Data.Time.Format.formatTime Data.Time.Format.defaultTimeLocale "%I:%M %P %A %d %B %Y" utc
    in Data.Text.pack str
-
-viewEntry :: (Int, Text) -> Text
-viewEntry (timestamp, entry) =
-  let prettyTime = formatTime timestamp
-   in mconcat
-        [ "    <h2>" <> prettyTime <> "</h1>\n",
-          "    <p>" <> HTMLEntities.Text.text entry <> "</p>\n"
-        ]
 
 encodeUint32 :: Int -> Strict.ByteString
 encodeUint32 i =

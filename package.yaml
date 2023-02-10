@@ -28,6 +28,9 @@ library:
     - text
     - bytestring
     - http-types
+    - html-entities
+    - time
+    - attoparsec
 
 executables:
   diaryvpn-exe:

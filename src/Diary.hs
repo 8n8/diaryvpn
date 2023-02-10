@@ -1,10 +1,16 @@
 module Diary (diary) where
 
-import Data.Bits (shiftR, (.&.))
+import qualified Data.Attoparsec.ByteString as Attoparsec
+import Data.Bits (shiftL, shiftR, (.&.))
 import Data.ByteString as Strict
 import Data.ByteString.Lazy as Lazy
 import Data.Text
 import Data.Text.Encoding
+import qualified Data.Time
+import qualified Data.Time.Clock
+import qualified Data.Time.Clock.POSIX
+import qualified Data.Time.Format
+import qualified HTMLEntities.Text
 import Network.HTTP.Types.Status
 import qualified Request
 import Response
@@ -16,12 +22,22 @@ data Request
   | Error400
   | Error500
   | NewEntry Int Text
+  | Read
+
+formatTime :: Int -> Text
+formatTime i =
+  let utc :: Data.Time.UTCTime
+      utc = Data.Time.Clock.POSIX.posixSecondsToUTCTime $ Data.Time.Clock.secondsToNominalDiffTime (realToFrac i)
+      str = Data.Time.Format.formatTime Data.Time.Format.defaultTimeLocale "%I:%M %P %A %d %B %Y" utc
+   in Data.Text.pack str
 
 parseRequest :: Request.Request -> Request
 parseRequest (Request.Request path body _ timestamp) =
   case path of
     [] ->
       Root
+    ["read"] ->
+      Read
     ["favicon.ico"] ->
       Favicon
     ["newentry"] ->
@@ -69,12 +85,89 @@ encodeEntry timestamp entry =
       encoded = encodeUtf8 entry
    in encodeUint32 timestamp <> encodeUint32 (Strict.length encoded) <> encoded
 
+readEntriesHtml :: [(Int, Text)] -> Text
+readEntriesHtml entries =
+  mconcat
+    [ "<!DOCTYPE html>\n\
+      \<html lang=\"en\">\n\
+      \  <head>\n\
+      \    <meta charset=\"utf-8\" />\n\
+      \    <meta name=\"viewport\" content=\"width=device-width\" />\n\
+      \    <title>Diary</title>\n\
+      \  </head>\n\
+      \  <body>\n",
+      mconcat (Prelude.map viewEntry entries),
+      "  </body>\n",
+      "</html>\n"
+    ]
+
+viewEntry :: (Int, Text) -> Text
+viewEntry (timestamp, entry) =
+  let prettyTime = formatTime timestamp
+   in mconcat
+        [ "    <h2>" <> prettyTime <> "</h1>\n",
+          "    <p>" <> HTMLEntities.Text.text entry <> "</p>\n"
+        ]
+
+parseDb :: Strict.ByteString -> Either String [(Int, Text)]
+parseDb raw =
+  Attoparsec.parseOnly dbParser raw
+
+dbParser :: Attoparsec.Parser [(Int, Text)]
+dbParser =
+  Attoparsec.many' entryParser
+
+entryParser :: Attoparsec.Parser (Int, Text)
+entryParser =
+  do
+    t <- uint32Parser
+    entry <- textParser
+    return (t, entry)
+
+textParser :: Attoparsec.Parser Text
+textParser =
+  do
+    size <- uint32Parser
+    bytes <- Attoparsec.take size
+    case decodeUtf8' bytes of
+      Left _ ->
+        fail "invalid utf8"
+      Right text ->
+        return text
+
+uint32Parser :: Attoparsec.Parser Int
+uint32Parser =
+  do
+    b0 <- fmap fromIntegral Attoparsec.anyWord8
+    b1 <- fmap fromIntegral Attoparsec.anyWord8
+    b2 <- fmap fromIntegral Attoparsec.anyWord8
+    b3 <- fmap fromIntegral Attoparsec.anyWord8
+    return $ b0 + b1 `shiftL` 8 + b2 `shiftL` 16 + b3 `shiftL` 24
+
 diary ::
   Strict.ByteString ->
   Request.Request ->
   (Response, Strict.ByteString)
 diary db request =
   case parseRequest request of
+    Read ->
+      case parseDb db of
+        Left _ ->
+          ( Response
+              { headers = [],
+                body = Lazy.empty,
+                status = internalServerError500
+              },
+            db
+          )
+        Right entries ->
+          ( Response
+              { headers = [("Content-Type", "text/html")],
+                body = fromStrict $ encodeUtf8 $ readEntriesHtml entries,
+                status = ok200
+              },
+            db
+          )
     NewEntry text timestamp ->
       ( Response
           { headers = [("Content-Type", "text/html")],
