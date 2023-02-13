@@ -3,7 +3,7 @@ module Main (main) where
 import Data.Bits (shiftR, (.&.))
 import Data.ByteString as Strict
 import Data.ByteString.Lazy as Lazy
-import Data.Text (lines, intercalate, Text, pack)
+import Data.Text (Text, intercalate, lines, pack)
 import Data.Text.Encoding (encodeUtf8)
 import qualified Data.Time
 import qualified Data.Time.Clock
@@ -21,16 +21,26 @@ import Test.Tasty
 import Test.Tasty.HUnit
 import qualified Test.Tasty.Hedgehog
 import Prelude
-    (Int, repeat, take, IO
-    , map, (<>), ($), (*), fromIntegral, realToFrac, mconcat)
+  ( IO,
+    Int,
+    fromIntegral,
+    map,
+    mconcat,
+    realToFrac,
+    repeat,
+    take,
+    ($),
+    (*),
+    (<>),
+  )
 
 viewEntry :: (Int, Text) -> Text
 viewEntry (timestamp, entry) =
   let prettyTime = formatTime timestamp
       prettyText =
         Data.Text.intercalate "</p><p>" $
-        Prelude.map HTMLEntities.Text.text $
-        lines entry
+          Prelude.map HTMLEntities.Text.text $
+            lines entry
    in mconcat
         [ "    <h2>" <> prettyTime <> "</h1>\n",
           "    <p>" <> prettyText <> "</p>\n"
@@ -43,7 +53,36 @@ indexHtml =
   \  <head>\n\
   \    <meta charset=\"utf-8\" />\n\
   \    <meta name=\"viewport\" content=\"width=device-width\" />\n\
-  \    <title>Diary</title\n\
+  \    <title>Diary</title>\n\
+  \    <style>\n\
+  \      html {\n\
+  \        font-family: sans-serif;\n\
+  \        font-size: 1.2rem;\n\
+  \      }\n\
+  \      label {\n\
+  \        font-size: 1.2rem;\n\
+  \      }\n\
+  \      form {\n\
+  \        display: flex;\n\
+  \        flex-direction: column;\n\
+  \        row-gap: 0.5rem;\n\
+  \      }\n\
+  \      textarea {\n\
+  \        font-family: sans-serif;\n\
+  \        font-size: 1.2rem;\n\
+  \      }\n\
+  \      textarea:focus {\n\
+  \        outline: blue solid 2px;\n\
+  \      }\n\
+  \      input {\n\
+  \        width: fit-content;\n\
+  \        font-size: 1.2rem;\n\
+  \        font-family: sans-serif;\n\
+  \      }\n\
+  \      input:focus {\n\
+  \        outline: blue solid 2px;\n\
+  \      }\n\
+  \    </style>\n\
   \  </head>\n\
   \  <body>\n\
   \    <form action=\"/newentry\" method=\"POST\">\n\
