@@ -28,7 +28,7 @@ formatTime :: Int -> Text
 formatTime i =
   let utc :: Data.Time.UTCTime
       utc = Data.Time.Clock.POSIX.posixSecondsToUTCTime $ Data.Time.Clock.secondsToNominalDiffTime (realToFrac i)
-      str = Data.Time.Format.formatTime Data.Time.Format.defaultTimeLocale "%I:%M %P %A %d %B %Y" utc
+      str = Data.Time.Format.formatTime Data.Time.Format.defaultTimeLocale "%-I:%M %P %A %-d %B %Y" utc
    in Data.Text.pack str
 
 parseRequest :: Request.Request -> Request
