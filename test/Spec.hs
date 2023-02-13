@@ -3,7 +3,7 @@ module Main (main) where
 import Data.Bits (shiftR, (.&.))
 import Data.ByteString as Strict
 import Data.ByteString.Lazy as Lazy
-import Data.Text
+import Data.Text (lines, intercalate, Text, pack)
 import Data.Text.Encoding (encodeUtf8)
 import qualified Data.Time
 import qualified Data.Time.Clock
@@ -20,13 +20,20 @@ import Response
 import Test.Tasty
 import Test.Tasty.HUnit
 import qualified Test.Tasty.Hedgehog
+import Prelude
+    (Int, repeat, take, IO
+    , map, (<>), ($), (*), fromIntegral, realToFrac, mconcat)
 
 viewEntry :: (Int, Text) -> Text
 viewEntry (timestamp, entry) =
   let prettyTime = formatTime timestamp
+      prettyText =
+        Data.Text.intercalate "</p><p>" $
+        Prelude.map HTMLEntities.Text.text $
+        lines entry
    in mconcat
         [ "    <h2>" <> prettyTime <> "</h1>\n",
-          "    <p>" <> HTMLEntities.Text.text entry <> "</p>\n"
+          "    <p>" <> prettyText <> "</p>\n"
         ]
 
 indexHtml :: Text
@@ -407,6 +414,20 @@ readEntriesHtml entries =
       \    <meta charset=\"utf-8\" />\n\
       \    <meta name=\"viewport\" content=\"width=device-width\" />\n\
       \    <title>Diary</title>\n\
+      \    <style>\n\
+      \      html {\n\
+      \        font-family: sans-serif;\n\
+      \      }\n\
+      \\n\
+      \      h2 {\n\
+      \        font-size: 1.5rem;\n\
+      \        font-weight: 600;\n\
+      \      }\n\
+      \      p {\n\
+      \        font-size: 1.2rem;\n\
+      \        font-weight: 400;\n\
+      \      }\n\
+      \    </style>\n\
       \  </head>\n\
       \  <body>\n",
       mconcat (Prelude.map viewEntry entries),
