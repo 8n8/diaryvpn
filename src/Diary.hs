@@ -62,7 +62,13 @@ submittedHtml =
   \  <head>\n\
   \    <meta charset=\"utf-8\" />\n\
   \    <meta name=\"viewport\" content=\"width=device-width\" />\n\
-  \    <title>Diary</title\n\
+  \    <title>Diary</title>\n\
+  \    <style>\n\
+  \      span {\n\
+  \        font-family: sans-serif;\n\
+  \        font-size: 1.2rem;\n\
+  \      }\n\
+  \    </style>\n\
   \  </head>\n\
   \  <body>\n\
   \    <span>Your new diary entry has been saved.</span>\n\
