@@ -28,6 +28,7 @@ import Prelude
     mconcat,
     realToFrac,
     repeat,
+    reverse,
     take,
     ($),
     (*),
@@ -475,7 +476,7 @@ readEntriesHtml entries =
       \    </style>\n\
       \  </head>\n\
       \  <body>\n",
-      mconcat (Prelude.map viewEntry entries),
+      mconcat (Prelude.map viewEntry (Prelude.reverse entries)),
       "  </body>\n",
       "</html>\n"
     ]
