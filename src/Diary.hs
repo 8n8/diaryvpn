@@ -84,6 +84,7 @@ submittedHtml =
   \        margin: 0;\n\
   \        column-gap: 1rem;\n\
   \        font-size: 1.5rem;\n\
+  \        font-family: sans-serif;\n\
   \      }\n\
   \    </style>\n\
   \  </head>\n\
