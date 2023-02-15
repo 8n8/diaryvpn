@@ -466,7 +466,7 @@ readEntriesHtml entries =
       \      }\n\
       \\n\
       \      h2 {\n\
-      \        font-size: 1.5rem;\n\
+      \        font-size: 1.2rem;\n\
       \        font-weight: 600;\n\
       \      }\n\
       \      p {\n\
