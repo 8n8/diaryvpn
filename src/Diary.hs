@@ -66,7 +66,7 @@ submittedHtml =
   \    <style>\n\
   \      span {\n\
   \        font-family: sans-serif;\n\
-  \        font-size: 1.2rem;\n\
+  \        font-size: 1.5rem;\n\
   \      }\n\
   \    </style>\n\
   \  </head>\n\
@@ -106,19 +106,45 @@ readEntriesHtml entries =
       \      }\n\
       \\n\
       \      h2 {\n\
-      \        font-size: 1.2rem;\n\
+      \        font-size: 1.5rem;\n\
       \        font-weight: 600;\n\
+      \        margin: 0;\n\
       \      }\n\
       \      p {\n\
-      \        font-size: 1.2rem;\n\
+      \        font-size: 1.5rem;\n\
       \        font-weight: 400;\n\
+      \      }\n\
+      \      a:focus {\n\
+      \        outline: blue solid 2px;\n\
+      \      }\n\
+      \      body {\n\
+      \        display: flex;\n\
+      \        flex-direction: column;\n\
+      \        row-gap: 1rem;\n\
+      \      }\n\
+      \      ul {\n\
+      \        display: flex;\n\
+      \        flex-direction: row;\n\
+      \        list-style-type: none;\n\
+      \        padding: 0;\n\
+      \        margin: 0;\n\
+      \        column-gap: 1rem;\n\
+      \        font-size: 1.5rem;\n\
       \      }\n\
       \    </style>\n\
       \  </head>\n\
-      \  <body>\n",
+      \  <body>\n\
+      \    <nav>\n\
+      \      <ul>\n\
+      \        <li><a href=\"/read\">Read</a></li>\n\
+      \        <li><a href=\"/\">Write</a></li>\n\
+      \      </ul>\n\
+      \    </nav>\n\
+      \    <div>\n",
       mconcat (Prelude.map viewEntry (Prelude.reverse entries)),
-      "  </body>\n",
-      "</html>\n"
+      "    </div>\n\
+      \  </body>\n\
+      \</html>\n"
     ]
 
 viewEntry :: (Int, Text) -> Text
@@ -252,10 +278,9 @@ indexHtml =
   \    <style>\n\
   \      html {\n\
   \        font-family: sans-serif;\n\
-  \        font-size: 1.2rem;\n\
   \      }\n\
   \      label {\n\
-  \        font-size: 1.2rem;\n\
+  \        font-size: 1.5rem;\n\
   \      }\n\
   \      form {\n\
   \        display: flex;\n\
@@ -264,14 +289,14 @@ indexHtml =
   \      }\n\
   \      textarea {\n\
   \        font-family: sans-serif;\n\
-  \        font-size: 1.2rem;\n\
+  \        font-size: 1.5rem;\n\
   \      }\n\
   \      textarea:focus {\n\
   \        outline: blue solid 2px;\n\
   \      }\n\
   \      input {\n\
   \        width: fit-content;\n\
-  \        font-size: 1.2rem;\n\
+  \        font-size: 1.5rem;\n\
   \        font-family: sans-serif;\n\
   \      }\n\
   \      input:focus {\n\
@@ -292,7 +317,7 @@ indexHtml =
   \        padding: 0;\n\
   \        margin: 0;\n\
   \        column-gap: 1rem;\n\
-  \        font-size: 1.2rem;\n\
+  \        font-size: 1.5rem;\n\
   \      }\n\
   \    </style>\n\
   \  </head>\n\
