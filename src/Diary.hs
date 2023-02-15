@@ -68,9 +68,32 @@ submittedHtml =
   \        font-family: sans-serif;\n\
   \        font-size: 1.5rem;\n\
   \      }\n\
+  \      a:focus {\n\
+  \        outline: blue solid 2px;\n\
+  \      }\n\
+  \      body {\n\
+  \        display: flex;\n\
+  \        flex-direction: column;\n\
+  \        row-gap: 1rem;\n\
+  \      }\n\
+  \      ul {\n\
+  \        display: flex;\n\
+  \        flex-direction: row;\n\
+  \        list-style-type: none;\n\
+  \        padding: 0;\n\
+  \        margin: 0;\n\
+  \        column-gap: 1rem;\n\
+  \        font-size: 1.5rem;\n\
+  \      }\n\
   \    </style>\n\
   \  </head>\n\
   \  <body>\n\
+  \    <nav>\n\
+  \      <ul>\n\
+  \        <li><a href=\"/read\">Read</a></li>\n\
+  \        <li><a href=\"/\">Write</a></li>\n\
+  \      </ul>\n\
+  \    </nav>\n\
   \    <span>Your new diary entry has been saved.</span>\n\
   \  </body>\n\
   \</html>\n\
