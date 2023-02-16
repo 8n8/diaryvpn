@@ -2,7 +2,7 @@
 
 DiaryVPN is a tiny web app for keeping a diary. It is intended to be run over Tailscale, see https://tailscale.com.
 
-Run the server on a computer that is on most of the time, and then access the web app from all your other devices.
+Run the server on a computer that is on most of the time, and then access the web app from all your other devices over your Tailscale network.
 
 # Install and run
 
@@ -22,11 +22,9 @@ Then open the file `diaryvpn/app/Main.hs` and set the path of the file to store 
 
 DiaryVPN is written in Haskell. You first need to install the Haskell Tool Stack to build it. Follow these instructions: https://docs.haskellstack.org/en/stable/#how-to-install-stack.
 
-Then run the following commands:
+Then run the following commands in the root of this repository:
 
 ```
-git clone git@github.com:8n8/diaryvpn.git
-cd diaryvpn
 stack build
 stack exec diaryvpn-exe
 ```
