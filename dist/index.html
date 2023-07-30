@@ -1,7 +1,7 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="en-GB">
-  <head>
-    <style>
+<head>
+  <style>
       nav > ul {
         display: flex;
         list-style: none;
@@ -9,19 +9,36 @@
         margin: 0;
         column-gap: 1rem;
       }
-    </style>
-  </head>
-  <body>
-    <nav>
-      <ul>
-        <li><a href="/">Write</a></li>
-        <li><a href="read">Read</a></li>
-      </ul>
-    </nav>
-    <form method="POST" action="write">
-      <label for="diaryentry">Write your diary</label>
-      <textarea id="diaryentry" name="diaryentry" rows="10" cols="50" spellcheck="true" wrap="hard"></textarea>
-      <input type="submit" value="Save">
-    </form>
-  </body>
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+      }
+      form > input {
+        display: inline-block;
+      }
+      form > textarea {
+        width: 100%;
+      }
+  </style>
+  <title>Diary</title>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li>
+        <a href="/">Write</a>
+      </li>
+      <li>
+        <a href="read">Read</a>
+      </li>
+    </ul>
+  </nav>
+  <form method="post" action="write">
+    <label for="diaryentry">Write your diary</label> 
+    <textarea id="diaryentry" name="diaryentry" rows="10" cols="50"
+    spellcheck="true" wrap="hard"></textarea><input type="submit"
+    value="Save">
+  </form>
+</body>
 </html>
